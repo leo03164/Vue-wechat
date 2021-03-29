@@ -81,7 +81,11 @@ router.post("/login", (req, res) => {
             bcrypt.compare(password, user.password)
                   .then(isMatch => {
                       if (isMatch) {
+                          // 根據不同規則會製作出不一樣的Token
                           const rule = { id: user.id, name: user.name, avatar:user.avatar };
+                          
+                          // jwt.sign主要用來製作Token用
+                          // secretOrKey的內容只是一個字串，是什麼無所謂
                           jwt.sign(rule, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
                               if (err) throw err;
                               res.json({
@@ -100,6 +104,8 @@ router.post("/login", (req, res) => {
 // $routes GET api/users/current
 // @desc return currnet user
 // @access private
+
+//authenticate("要驗證的內容",{session不存檔})
 router.get("/current", password.authenticate("jwt",{session:false}), (req, res) => {
     res.json({
         id: req.user.id,

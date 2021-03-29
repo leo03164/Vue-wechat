@@ -9,6 +9,7 @@ opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = keys.secretOrKey;
 
 module.exports = passport => {
+    // jwt_payload為返回的物件詳細內容
     passport.use(new JwtStrategy(opts, (jwt_payload, done) => {
         console.log(jwt_payload);
         User.findById(jwt_payload.id)
